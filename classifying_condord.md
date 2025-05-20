@@ -176,9 +176,9 @@ The result is a dataset of 1,911 text segments (1,064 from Emerson and 847 from 
 
 Before diving into classification, we visualize the most frequent words used by each author through word clouds, excluding common stopwords:
 
-![emerson_word_cloud](/Users/ranton/classifying_concord/emerson_word_cloud.png)
+![emerson_word_cloud](emerson_word_cloud.png)
 
-![thoreau_word_cloud](/Users/ranton/classifying_concord/thoreau_word_cloud.png)
+![thoreau_word_cloud](thoreau_word_cloud.png)
 
 These visualizations already reveal interesting differences in vocabulary. Emerson's text prominently features abstract terms like "soul," "nature," "truth," and "power," reflecting his focus on philosophical concepts. Thoreau's cloud emphasizes more concrete words like "house," "wood," "water," and "life," mirroring his practical observations at Walden Pond.
 
@@ -239,7 +239,7 @@ thoreau       0.87      0.79      0.83       173
 accuracy                          0.85       383
 ```
 
-![logistic_regression_confusion](/Users/ranton/classifying_concord/logistic_regression_confusion.png)
+![logistic_regression_confusion](logistic_regression_confusion.png)
 
 Logistic regression achieves an impressive 85% accuracy, correctly identifying the author in most cases. 
 
@@ -287,7 +287,7 @@ thoreau       0.87      0.80      0.83       173
 accuracy                          0.86       383
 ```
 
-![svm_confusion](/Users/ranton/classifying_concord/svm_confusion.png)
+![svm_confusion](svm_confusion.png)
 
 The SVM achieves our best traditional model performance at 86% accuracy. I think SVM's are somewhat underappreciated amid all the neural network hype. They train in an amount of time that is quite zippy compared to more complex models that do not always beat them without a lot of training data and more risk of overfitting.
 
@@ -328,7 +328,7 @@ thoreau       0.90      0.89      0.89       173
 accuracy                          0.90       383
 ```
 
-![lr_dbert_confusion](/Users/ranton/classifying_concord/lr_dbert_confusion.png)
+![lr_dbert_confusion](lr_dbert_confusion.png)
 
 **SVM on DistilBERT hidden states**:
 ```
@@ -403,7 +403,7 @@ thoreau       0.91      0.91      0.91       173
 accuracy                          0.92       383
 ```
 
-![fine_tuned_dbert_confusion](/Users/ranton/classifying_concord/fine_tuned_dbert_confusion.png)
+![fine_tuned_dbert_confusion](fine_tuned_dbert_confusion.png)
 
 The fine-tuned DistilBERT achieves our best performance at 92% accuracy, demonstrating how powerful transformer models are for capturing subtle stylistic differences.
 
