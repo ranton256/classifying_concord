@@ -1,36 +1,46 @@
-
-
-
-
 # Classifying Concord: Machine Learning Meets Transcendentalism
+
+© 2025 Richard Anton. All rights reserved.
+
+The accompanying code, but not his article itself, is licensed under the MIT License. See the LICENSE file for details.
+
+The literary works referenced in this article are in the public domain.
 
 ## Table of Contents
 
-1. [Introduction](#introduction)
-2. [The Evolution of Machine Learning Classification](#the-evolution-of-machine-learning-classification)
-3. [Creating a Unique Literary Dataset](#creating-a-unique-literary-dataset)
-   - [Data Acquisition](#data-acquisition)
-   - [Text Preprocessing](#text-preprocessing)
-   - [Text Segmentation](#text-segmentation)
-   - [Dataset Creation](#dataset-creation)
-4. [Text Representation Techniques](#text-representation-techniques)
-   - [Visualization with Word Clouds](#visualization-with-word-clouds)
-   - [Text Preprocessing for ML](#text-preprocessing-for-ml)
-   - [TF-IDF Vectorization](#tf-idf-vectorization)
-5. [Traditional ML Classification Models](#traditional-ml-classification-models)
-   - [Logistic Regression](#logistic-regression)
-   - [Random Forest](#random-forest)
-   - [Support Vector Machine](#support-vector-machine)
-6. [Deep Learning and Transformer Models](#deep-learning-and-transformer-models)
-   - [Feature Extraction Approach](#feature-extraction-approach)
-   - [Fine-tuning DistilBERT](#fine-tuning-distilbert)
-7. [Analysis of Results](#analysis-of-results)
-   - [Performance Comparison](#performance-comparison)
-   - [Misclassification Analysis](#misclassification-analysis)
-   - [Model Interpretability](#model-interpretability)
-8. [Conclusion](#conclusion)
-9. [References](#references)
-10. [Appendix: Project Repository](#appendix-project-repository)
+- [Classifying Concord: Machine Learning Meets Transcendentalism](#classifying-concord-machine-learning-meets-transcendentalism)
+  - [Table of Contents](#table-of-contents)
+  - [Introduction](#introduction)
+  - [The Evolution of Machine Learning Classification](#the-evolution-of-machine-learning-classification)
+  - [Creating a Unique Literary Dataset](#creating-a-unique-literary-dataset)
+    - [Data Acquisition](#data-acquisition)
+    - [Text Preprocessing](#text-preprocessing)
+    - [Text Segmentation](#text-segmentation)
+    - [Dataset Creation](#dataset-creation)
+  - [Text Representation Techniques](#text-representation-techniques)
+    - [Visualization with Word Clouds](#visualization-with-word-clouds)
+    - [Text Preprocessing for ML](#text-preprocessing-for-ml)
+    - [TF-IDF Vectorization](#tf-idf-vectorization)
+  - [Traditional ML Classification Models](#traditional-ml-classification-models)
+    - [Logistic Regression](#logistic-regression)
+    - [Random Forest](#random-forest)
+    - [Support Vector Machine](#support-vector-machine)
+  - [Deep Learning and Transformer Models](#deep-learning-and-transformer-models)
+    - [Feature Extraction Approach](#feature-extraction-approach)
+    - [Fine-tuning DistilBERT](#fine-tuning-distilbert)
+  - [Analysis of Results](#analysis-of-results)
+    - [Performance Comparison](#performance-comparison)
+    - [Misclassification Analysis](#misclassification-analysis)
+    - [Model Interpretability](#model-interpretability)
+  - [Conclusion](#conclusion)
+    - [Future Research Directions](#future-research-directions)
+  - [References](#references)
+    - [Literary Works and Sources](#literary-works-and-sources)
+    - [Machine Learning and NLP References](#machine-learning-and-nlp-references)
+    - [Computational Stylometry and Literary Analysis](#computational-stylometry-and-literary-analysis)
+    - [Python Libraries and Tools](#python-libraries-and-tools)
+  - [Appendix: Project Repository](#appendix-project-repository)
+    - [Installation and Usage](#installation-and-usage)
 
 ## Introduction
 
