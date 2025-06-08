@@ -44,15 +44,17 @@ The literary works referenced in this article are in the public domain.
 
 ## Introduction
 
-I wanted to show methods for classifying text using a novel dataset rather than one of the toy ones so often used for tutorials. What I settled on eventually was to classify text to attribute it to the original author. The appendix includes the project repository link where all code and data used in this study can be accessed.
-
-Ralph Waldo Emerson and Henry David Thoreau both resided in mid-19th-century Concord, Massachusetts. Their writings and philosophical exchanges contributed to American Transcendentalism, and both produced literary works that are still influential. Despite their shared location and intellectual community, their writing styles differ in identifiable ways.
-
-*Walden* has always been one of my favorite books and had a big influence on me when I first read it in high school, but Emerson was a different story. I found his writing style wordy and frustrating. Recently I revisited the context of these works when I read *The Transcendentalists and Their World* (Gross, 2021). which sparked the idea to use the text from their now public domain classic works to create some novel machine learning datasets for practice.
-
 This article is a walkthrough of using machine learning classification techniques combined with some preprocessing to distinguish between the writing of Emerson and Thoreau.  
 
-We created our dataset from two public domain works, one for each author. For Emerson, we chose *Essays: First Series* (1841), and for Thoreau, there was really no choice but *Walden, and On The Duty Of Civil Disobedience* (1854). 
+I wanted to show methods for classifying text using a novel dataset rather than one of the toy ones so often used for tutorials. Eventually I settled on classifying text to predict the original author.  Since I wanted this to be primarily about actual writing style rather than the changes to language between regions or over time I chose two authors from the same era and location, Emerson and Thoreau.
+
+Ralph Waldo Emerson and Henry David Thoreau both resided in mid-19th-century Concord, Massachusetts. Their writings and philosophical exchanges contributed to [American Transcendentalism](https://plato.stanford.edu/entries/transcendentalism/), and both produced literary works that remain influential. Despite their shared location and intellectual community, their writing styles differ in identifiable ways.
+
+*Walden* has always been one of my favorite books and had a big influence on me when I first read it in high school, but Emerson was a different story. I found his writing style wordy and frustrating. Recently I revisited the context of these works when I read *[The Transcendentalists and Their World](https://us.macmillan.com/books/9780374279325/thetranscendentalistsandtheirworld/)* (Gross, 2021) which gave me the idea to use their writings as the basis for this project.
+
+All the code and data used in this study can be accessed via the GitHub repo [http://github.com/ranton256/classifying_concord](github.com/ranton256/classifying_concord).
+
+The dataset was created from two public domain works, one by each author. For Emerson, I used *Essays: First Series* (1841), and for Thoreau, there was really no choice but *Walden, and On The Duty Of Civil Disobedience* (1854). 
 
 This dataset offers several practical advantages for educational purposes:
 
@@ -63,20 +65,18 @@ This dataset offers several practical advantages for educational purposes:
 
 The texts were segmented into passages of 3-5 sentences each, creating a collection of labeled examples for training and testing classification models.
 
-This article examines how different machine learning approaches perform on this classification task. We compare traditional methods, including logistic regression, random forests, and support vector machines, with newer transformer-based models.
-
-The analysis serves both technical and humanities-oriented readers by demonstrating how computational methods can quantify stylistic differences already noted qualitatively. 
+To explore how different machine learning approaches perform on this task I compared multiple methods.  These included traditional methods, including logistic regression, random forests, and support vector machines, along with newer transformer-based models.
 
 ## The Evolution of Machine Learning Classification
 
-Text classification has developed substantially over the years. In the 1960s, early methods relied on hand-crafted rules, then statistical techniques took over. Advanced neural networks joined simpler statistical models in the following years, notably recurrent neural networks. More recently, transformer-based models have gained prominence in this and most other natural language processing (NLP) use cases from 2018 onward. 
+Text classification has developed substantially over the years. Early methods in the 1960s relied on hand-crafted rules, then statistical techniques took over. Advanced neural networks joined simpler statistical models in the following years, notably recurrent neural networks. More recently, transformer-based models have gained prominence in this and most other natural language processing (NLP) use cases from 2018 onward. 
 
-1. **Rule-based systems** (1960s-1980s):  Manually crafted rules and decision trees
+1. **Rule-based systems** (1960s-1980s):  Manually crafted rules and decision trees.
 2. **Statistical methods** (1990s-2000s): Naïve Bayes, Support Vector Machines, and Logistic Regression
-3. **Neural network approaches** (2010s): recurrent neural networks (RNNs) and convolutional neural networks (CNNs)
-4. **Transformer models** (2018-present): BERT,  GPT, and their derivatives
+3. **Neural network approaches** (2010s): Recurrent neural networks (RNNs) and convolutional neural networks (CNNs)
+4. **Transformer models** (2018-present): BERT,  GPT, and their derivatives following the original "Attention is All You Need" paper on transformers Vaswani, A. et al., 2017).
 
-Each era brought improvements in accuracy and capability. The field expanded from simple categorization to include sentiment analysis, authorship attribution, and stylometry—the quantitative study of writing style.
+Each era brought improvements to accuracy and capability. The field also expanded from simple categorization to include other use cases like sentiment analysis, authorship attribution, and stylometry—the quantitative study of writing style.
 
 In our Concord project, we compare methods across this range, from traditional TF-IDF based classification to transformer-based models.
 
@@ -85,8 +85,6 @@ In our Concord project, we compare methods across this range, from traditional T
 ### Data Acquisition
 
 First, we selected two representative texts from Project Gutenberg's public domain collection.
-
-This programmatic approach ensures reproducibility and eliminates manual steps.
 
 ```python
 emerson_txt_url = "https://www.gutenberg.org/ebooks/16643.txt.utf-8"
@@ -201,7 +199,7 @@ combined_df['final_text'] = final_text
 
 ### TF-IDF Vectorization
 
-For our traditional machine learning models, we convert text to numerical features using Term Frequency-Inverse Document Frequency (TF-IDF) vectorization:
+For our traditional machine learning models, we convert text to numerical features using Term Frequency-Inverse Document Frequency ([TF-IDF](https://en.wikipedia.org/wiki/Tf–idf)) vectorization:
 
 ```python
 vectorizer = TfidfVectorizer()
@@ -221,7 +219,7 @@ x_train, x_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_
 
 ### Logistic Regression
 
-We begin with logistic regression, a simple but effective linear classifier:
+We begin with [logistic regression](https://en.wikipedia.org/wiki/Logistic_regression), a simple but effective linear classifier (Cox, D.R., 1958).
 
 ```python
 lr_model = LogisticRegression(solver='saga', random_state=8102, n_jobs=-2)
@@ -229,7 +227,10 @@ lr_model.fit(x_train, y_train)
 y_pred = lr_model.predict(x_test)
 ```
 
-Results:
+And here we have our results for this first model.
+
+If you are not already familiar with precision, accuracy, recall, and F1 metrics for model evaluation or want a review, then I recommend the article [Performance Metrics: Confusion matrix, Precision, Recall, and F1 Score](https://towardsdatascience.com/performance-metrics-confusion-matrix-precision-recall-and-f1-score-a8fe076a2262/)  (Jayaswal, V. , 2020).
+
 ```
 precision    recall  f1-score   support
 
@@ -269,7 +270,7 @@ The Random Forest model achieves 83% accuracy, slightly lower than logistic regr
 
 ### Support Vector Machine
 
-We also implement a Support Vector Machine with a radial basis function kernel:
+We also implement a [Support Vector Machine](https://en.wikipedia.org/wiki/Support_vector_machine) (SVM) with a radial basis function kernel. SVM's are often a strong model compared to traditional neural networks (pre-transformer,etc) that can train more quickly and often converge more reliabily (Cortes & Vapnik 1995). If you are not familiar with SVMs and want to understand the theory behind them a good place to start is the KDnuggets article [*A gentle introduction to support vector machines*](https://www.kdnuggets.com/2023/07/gentle-introduction-support-vector-machines.html)  (Priya, 2023). 
 
 ```python
 clf = svm.SVC(kernel='rbf')
@@ -289,11 +290,13 @@ accuracy                          0.86       383
 
 ![svm_confusion](svm_confusion.png)
 
-The SVM achieves our best traditional model performance at 86% accuracy. I think SVM's are somewhat underappreciated amid all the neural network hype. They train in an amount of time that is quite zippy compared to more complex models that do not always beat them without a lot of training data and more risk of overfitting.
+The SVM achieves our best traditional model performance at 86% accuracy. I think SVM's are somewhat underappreciated amid all the neural network hype. They train in an amount of time that is quite zippy compared to more complex models that do not always beat them without a lot of training data and with less risk of overfitting.
 
 ## Deep Learning and Transformer Models
 
-Transformer models have revolutionized NLP tasks by capturing complex contextual relationships in text. Here we use DistilBERT, a lightweight version of BERT (Bidirectional Encoder Representations from Transformers). In 2025, this is not exactly state of the art, however you can train or fine-tune it easily with modest resources. I did this entire project on Google Colab for free.
+Transformer models revolutionized NLP tasks by capturing complex contextual relationships in text. Here we use DistilBERT  (Sanh, Debut, Chaumond, & Wolf, 2019), a lightweight version of BERT (Bidirectional Encoder Representations from Transformers) (Devlin, Chang, Lee, & Toutanova, 2019). 
+
+In 2025, this is not exactly state of the art, however you can train or fine-tune it easily with modest resources. I did this entire project on Google Colab for free.
 
 ### Feature Extraction Approach
 
@@ -344,7 +347,7 @@ This hybrid approach shows a significant improvement, with accuracy increasing t
 
 ### Fine-tuning DistilBERT
 
-And finally, we fine-tune DistilBERT specifically for our classification task 
+And finally, we [fine-tune](https://huggingface.co/docs/transformers/en/training) DistilBERT specifically for our classification task 
 
 ```python
 from transformers import DistilBertForSequenceClassification
@@ -496,19 +499,20 @@ The classification results confirm that Emerson and Thoreau maintained distinct 
 
 ### Machine Learning and NLP References
 
-6. Devlin, J., Chang, M.W., Lee, K., & Toutanova, K. (2019). BERT: Pre-training of Deep Bidirectional Transformers for Language Understanding. *Proceedings of NAACL-HLT 2019*, 4171–4186. https://doi.org/10.18653/v1/N19-1423
-
-7. Sanh, V., Debut, L., Chaumond, J., & Wolf, T. (2019). DistilBERT, a distilled version of BERT: smaller, faster, cheaper and lighter. *arXiv preprint arXiv:1910.01108*.
-
-8. Hastie, T., Tibshirani, R., & Friedman, J. (2009). *The Elements of Statistical Learning: Data Mining, Inference, and Prediction* (2nd ed.). Springer.
-
-9. Sebastiani, F. (2002). Machine learning in automated text categorization. *ACM Computing Surveys*, 34(1), 1–47. https://doi.org/10.1145/505282.505283
-
-10. Honnibal, M., & Montani, I. (2017). spaCy 2: Natural language understanding with Bloom embeddings, convolutional neural networks and incremental parsing.
-
-11. Pedregosa, F., Varoquaux, G., Gramfort, A., Michel, V., Thirion, B., Grisel, O., ... & Duchesnay, É. (2011). Scikit-learn: Machine Learning in Python. *Journal of Machine Learning Research*, 12, 2825-2830.
-
-12. Wolf, T., Debut, L., Sanh, V., Chaumond, J., Delangue, C., Moi, A., ... & Rush, A. M. (2020). Transformers: State-of-the-Art Natural Language Processing. *Proceedings of the 2020 Conference on Empirical Methods in Natural Language Processing: System Demonstrations*, 38–45.
+6. Breiman, L. (2001). Random Forests. *Machine Learning, 45*, 5-32. https://doi.org/10.1023/A:1010933404324
+7. Cortes, C., & Vapnik, V.N. (1995). Support-Vector Networks. *Machine Learning, 20*, 273-297.https://doi.org/10.1007/BF00994018
+8. Cox, David R. (1958). "The regression analysis of binary sequences (with discussion)". *J R Stat Soc B*. 20 (2): 215–242. https://doi.org/10.1111%2Fj.2517-6161.1958.tb00292.x. [JSTOR](https://en.wikipedia.org/wiki/JSTOR_(identifier)) [2983890](https://www.jstor.org/stable/2983890).
+9. Devlin, J., Chang, M.W., Lee, K., & Toutanova, K. (2019). BERT: Pre-training of Deep Bidirectional Transformers for Language Understanding. *Proceedings of NAACL-HLT 2019*, 4171–4186. https://doi.org/10.18653/v1/N19-1423
+10. Hastie, T., Tibshirani, R., & Friedman, J. (2009). *The Elements of Statistical Learning: Data Mining, Inference, and Prediction* (2nd ed.). Springer.
+11. Honnibal, M., & Montani, I. (2017). spaCy 2: Natural language understanding with Bloom embeddings, convolutional neural networks and incremental parsing.
+12. Jayaswal, V. (2020, September 14). *Performance metrics: Confusion matrix, precision, recall, and F1 score*. Towards Data Science. https://towardsdatascience.com/performance-metrics-confusion-matrix-precision-recall-and-f1-score-a8fe076a2262/ 
+13. Pedregosa, F., Varoquaux, G., Gramfort, A., Michel, V., Thirion, B., Grisel, O., ... & Duchesnay, É. (2011). Scikit-learn: Machine Learning in Python. *Journal of Machine Learning Research*, 12, 2825-2830.
+14. Priya, B. C. (2023, July 10). *A gentle introduction to support vector machines*. KDnuggets. https://www.kdnuggets.com/2023/07/gentle-introduction-support-vector-machines.html
+15. Sanh, V., Debut, L., Chaumond, J., & Wolf, T. (2019). DistilBERT, a  distilled version of BERT: smaller, faster, cheaper and lighter. *ArXiv, abs/1910.01108*. https://doi.org/10.48550/arXiv.1910.01108
+16. Sebastiani, F. (2002). Machine learning in automated text categorization. *ACM Computing Surveys*, 34(1), 1–47. https://doi.org/10.1145/505282.505283
+17. Spärck Jones, K. (1973). Index term weighting. *Inf. Storage Retr., 9*, 619-633.
+18. Vaswani, A., Shazeer, N.M., Parmar, N., Uszkoreit, J., Jones, L., Gomez, A.N.,  Kaiser, L., & Polosukhin, I. (2017). [Attention is All you Need.](https://arxiv.org/abs/1706.03762) *Neural Information Processing Systems*.
+19. Wolf, T., Debut, L., Sanh, V., Chaumond, J., Delangue, C., Moi, A., ... & Rush, A. M. (2020). Transformers: State-of-the-Art Natural Language Processing. *Proceedings of the 2020 Conference on Empirical Methods in Natural Language Processing: System Demonstrations*, 38–45.
 
 ### Computational Stylometry and Literary Analysis
 
@@ -519,6 +523,8 @@ The classification results confirm that Emerson and Thoreau maintained distinct 
 15. Stamatatos, E. (2009). A survey of modern authorship attribution methods. *Journal of the American Society for Information Science and Technology*, 60(3), 538-556. https://doi.org/10.1002/asi.21001
 
 16. Underwood, T. (2019). *Distant Horizons: Digital Evidence and Literary Change*. University of Chicago Press.
+
+17. 
 
 ### Python Libraries and Tools
 
