@@ -37,7 +37,7 @@ This project bridges machine learning and literary analysis, providing a reprodu
 1. **Clone the repository:**
 
    ```shell
-   git clone https://github.com/yourusername/classifying_concord.git
+   git clone https://github.com/ranton256/classifying_concord.git
    cd classifying_concord
    ```
 

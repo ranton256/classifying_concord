@@ -450,9 +450,7 @@ The most strongly Emerson-associated terms include abstract nouns and adjectives
 
 ## Conclusion
 
-This analysis of Emerson and Thoreau's writing demonstrates the application of machine learning to literary style classification. The results show that computational methods can differentiate between these authors with measurable accuracy. The fine-tuned DistilBERT model achieved 92% accuracy on the test set, while traditional machine learning approaches reached 83-86% accuracy.
-
-The project connects multiple disciplines: computational linguistics, machine learning, and literary studies. For the ML community, it provides a concrete case study in text classification across different algorithmic approaches. For literary scholars, it offers quantitative evidence for stylistic differences previously described through close reading.
+This analysis of Emerson and Thoreau's writing demonstrates the application of machine learning to literary style classification. The results show how well even simpler ML models can distinguish between these authors with reasonable accuracy. The fine-tuned DistilBERT model achieved 92% accuracy on the test set, while traditional machine learning approaches reached 83-86% accuracy.
 
 The performance progression from traditional to transformer-based models reflects broader developments in natural language processing. TF-IDF vectorization with classic algorithms provided a functional baseline (83-86% accuracy), while transformer models improved on these results (92% accuracy) by capturing contextual relationships between words.
 
@@ -465,23 +463,7 @@ The misclassification analysis revealed specific patterns in the 30 misclassifie
 
 Thoreau's nature descriptions and practical observations were rarely misclassified, while his philosophical reflections were sometimes attributed to Emerson. This aligns with the known characteristics of their writing—Thoreau's concrete observations stand distinct from Emerson's typically abstract style.
 
-### Future Research Directions
-
-This work suggests several practical extensions:
-
-1. Testing with additional works from each author to determine if the classification accuracy holds across their complete corpus
-
-2. Including other Transcendentalist writers to create a multi-class classification problem
-
-3. Analyzing how each author's style changed over time by training on chronologically labeled texts
-
-4. Creating topic-based classifiers to identify patterns in how each author addressed specific subjects
-
-5. Implementing explainable AI techniques to better understand what aspects of style the transformer models detect
-
-This project demonstrates one practical application of text classification to literary analysis. As NLP methods continue to advance, their application to humanities research can provide new analytical tools while offering challenging test cases for ML development.
-
-The classification results confirm that Emerson and Thoreau maintained distinct writing styles despite their shared philosophical interests and geographic proximity. These computational findings support established literary scholarship through quantitative measurement of stylistic differences between these significant American authors.
+The classification results highlight the distinct writing styles of that Emerson and Thoreau despite their shared historical context, philosophy, interests, and proximity.
 
 ## References
 
@@ -489,13 +471,15 @@ The classification results confirm that Emerson and Thoreau maintained distinct 
 
 1. Emerson, R.W. (1841). *Essays: First Series*. James Munroe and Company. Retrieved from Project Gutenberg: https://www.gutenberg.org/ebooks/16643
 
-2. Thoreau, H.D. (1854). *Walden, and On The Duty Of Civil Disobedience*. Ticknor and Fields. Retrieved from Project Gutenberg: https://www.gutenberg.org/ebooks/205
+2. Gross, R. A. (2021). [*The transcendentalists and their world*](https://us.macmillan.com/books/9780374279325/thetranscendentalistsandtheirworld/). Farrar, Straus and Giroux.
 
-3. Richardson, R.D. (1995). *Emerson: The Mind on Fire*. University of California Press.
+3. Thoreau, H.D. (1854). *Walden, and On The Duty Of Civil Disobedience*. Ticknor and Fields. Retrieved from Project Gutenberg: https://www.gutenberg.org/ebooks/205
 
-4. Walls, L.D. (2017). *Henry David Thoreau: A Life*. University of Chicago Press.
+4. Richardson, R.D. (1995). *Emerson: The Mind on Fire*. University of California Press.
 
-5. Buell, L. (2003). *Emerson*. Harvard University Press.
+5. Walls, L.D. (2017). *Henry David Thoreau: A Life*. University of Chicago Press.
+
+6. Buell, L. (2003). *Emerson*. Harvard University Press.
 
 ### Machine Learning and NLP References
 
@@ -517,14 +501,9 @@ The classification results confirm that Emerson and Thoreau maintained distinct 
 ### Computational Stylometry and Literary Analysis
 
 13. Burrows, J. (2002). 'Delta': a Measure of Stylistic Difference and a Guide to Likely Authorship. *Literary and Linguistic Computing*, 17(3), 267–287. https://doi.org/10.1093/llc/17.3.267
-
 14. Jockers, M.L. (2013). *Macroanalysis: Digital Methods and Literary History*. University of Illinois Press.
-
 15. Stamatatos, E. (2009). A survey of modern authorship attribution methods. *Journal of the American Society for Information Science and Technology*, 60(3), 538-556. https://doi.org/10.1002/asi.21001
-
 16. Underwood, T. (2019). *Distant Horizons: Digital Evidence and Literary Change*. University of Chicago Press.
-
-17. 
 
 ### Python Libraries and Tools
 
@@ -534,9 +513,11 @@ The classification results confirm that Emerson and Thoreau maintained distinct 
 
 19. Hunter, J. D. (2007). Matplotlib: A 2D Graphics Environment. *Computing in Science & Engineering*, 9(3), 90-95. https://doi.org/10.1109/MCSE.2007.55
 
-20. Waskom, M.L. (2021). seaborn: statistical data visualization. *Journal of Open Source Software*, 6(60), 3021. https://doi.org/10.21105/joss.03021
+20. Pedregosa *et al.* (2011). [Scikit-learn](https://scikit-learn.org/): Machine Learning in  Python. *Journal of Machine Learning Research*, *12*, 2825–2830.
 
-21. Paszke, A., Gross, S., Massa, F., Lerer, A., Bradbury, J., Chanan, G., ... & Chintala, S. (2019). PyTorch: An Imperative Style, High-Performance Deep Learning Library. *Advances in Neural Information Processing Systems*, 32, 8026-8037.
+21. Waskom, M.L. (2021). seaborn: statistical data visualization. *Journal of Open Source Software*, 6(60), 3021. https://doi.org/10.21105/joss.03021
+
+22. Paszke, A., Gross, S., Massa, F., Lerer, A., Bradbury, J., Chanan, G., ... & Chintala, S. (2019). PyTorch: An Imperative Style, High-Performance Deep Learning Library. *Advances in Neural Information Processing Systems*, 32, 8026-8037.
 
 ## Appendix: Project Repository
 
