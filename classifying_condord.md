@@ -46,7 +46,7 @@ The literary works referenced in this article are in the public domain.
 
 This article is a walkthrough of using machine learning classification techniques combined with some preprocessing to distinguish between the writing of Emerson and Thoreau.  
 
-I wanted to show methods for classifying text using a novel dataset rather than one of the toy ones so often used for tutorials. Eventually I settled on classifying text to predict the original author.  Since I wanted this to be primarily about actual writing style rather than the changes to language between regions or over time I chose two authors from the same era and location, Emerson and Thoreau.
+I wanted to show methods for classifying text using a novel dataset rather than one of the toy ones so often used for tutorials. Eventually I settled on classifying text to predict the original author.  Since I wanted this to be primarily about actual writing style rather than the changes to language between regions or over time I chose two authors from the same era and location, Emerson and Thoreau. For background on computational authorship attribution see Koppel et al. (2009) .
 
 Ralph Waldo Emerson and Henry David Thoreau both resided in mid-19th-century Concord, Massachusetts. Their writings and philosophical exchanges contributed to [American Transcendentalism](https://plato.stanford.edu/entries/transcendentalism/), and both produced literary works that remain influential. Despite their shared location and intellectual community, their writing styles differ in identifiable ways.
 
@@ -69,14 +69,14 @@ To explore how different machine learning approaches perform on this task I comp
 
 ## The Evolution of Machine Learning Classification
 
-Text classification has developed substantially over the years. Early methods in the 1960s relied on hand-crafted rules, then statistical techniques took over. Advanced neural networks joined simpler statistical models in the following years, notably recurrent neural networks. More recently, transformer-based models have gained prominence in this and most other natural language processing (NLP) use cases from 2018 onward. 
+Text classification has developed substantially over the years. Early methods in the 1960s relied on hand-crafted rules, for example Rocchio (1971), then statistical techniques took over. Advanced neural networks joined simpler statistical models in the following years, notably recurrent neural networks (Sebastiani, 2002). More recently, transformer-based models have gained prominence in this and most other natural language processing (NLP) use cases from 2018 onward.
 
 1. **Rule-based systems** (1960s-1980s):  Manually crafted rules and decision trees.
 2. **Statistical methods** (1990s-2000s): Naïve Bayes, Support Vector Machines, and Logistic Regression
-3. **Neural network approaches** (2010s): Recurrent neural networks (RNNs) and convolutional neural networks (CNNs)
+3. **Neural network approaches** (2010s): Recurrent neural networks (RNNs) including LSTMs (Hochreiter & Schmidhuber, 1997) and convolutional neural networks (CNNs) (LeCun et al. 1998).
 4. **Transformer models** (2018-present): BERT,  GPT, and their derivatives following the original "Attention is All You Need" paper on transformers Vaswani, A. et al., 2017).
 
-Each era brought improvements to accuracy and capability. The field also expanded from simple categorization to include other use cases like sentiment analysis, authorship attribution, and stylometry—the quantitative study of writing style.
+Each era brought improvements to accuracy and capability. The field also expanded from simple categorization to include other use cases like sentiment analysis, authorship attribution (Stamatatos, 2009), and stylometry—the quantitative study of writing style (Burrows, 2002).
 
 In our Concord project, we compare methods across this range, from traditional TF-IDF based classification to transformer-based models.
 
@@ -84,7 +84,7 @@ In our Concord project, we compare methods across this range, from traditional T
 
 ### Data Acquisition
 
-First, we selected two representative texts from Project Gutenberg's public domain collection.
+First, we selected two representative texts from Project Gutenberg's public domain collection. ([Project Gutenberg](https://www.gutenberg.org/), n.d.). 
 
 ```python
 emerson_txt_url = "https://www.gutenberg.org/ebooks/16643.txt.utf-8"
@@ -127,7 +127,7 @@ def trim_frontmatter(filename):
 
 ### Text Segmentation
 
-We segment the texts into manageable chunks of 3-5 sentences each. This creates a dataset with many examples for training and testing while preserving enough context to capture authorial style. We use [spaCy](https://spacy.io/), a powerful and popular natural language processing library, to perform the segmentation. 
+We segment the texts into manageable chunks of 3-5 sentences each. This creates a dataset with many examples for training and testing while preserving enough context to capture authorial style. We use [spaCy](https://spacy.io/), a powerful and popular natural language processing library, to perform the segmentation (Honnibal & Montani, 2017). 
 
 This function creates randomly-sized windows of 3-5 sentences, providing natural text chunks while introducing variation in the dataset.
 
@@ -260,7 +260,7 @@ X = vectorizer.fit_transform(combined_df["final_text"])
 y = combined_df["label"]
 ```
 
-TF-IDF converts text into numerical vectors by calculating two components for each word: how frequently it appears in a specific document (Term Frequency), and how unique it is across all documents (Inverse Document Frequency). The value combines how frequently the term appears in the document (TF) and how unique it is across all documents (IDF). This balances common words against distinctive ones that might better differentiate the authors.
+TF-IDF converts text into numerical vectors by calculating two components for each word: how frequently it appears in a specific document (Term Frequency), and how unique it is across all documents (Inverse Document Frequency) (Jones,  1972). The value combines how frequently the term appears in the document (TF) and how unique it is across all documents (IDF). This balances common words against distinctive ones that might better differentiate the authors (Salton & Buckley, 1988).    
 
 ## Traditional ML Classification Models
 
@@ -301,7 +301,7 @@ Here we have included confusion matrix. For space we will omit this for most of 
 
 ### Random Forest
 
-Next, we implement a Random Forest classifier, which creates an ensemble of decision trees:
+Next, we implement a Random Forest classifier, which creates an ensemble of decision trees (Breiman, 2001).
 
 ```python
 rf = RandomForestClassifier()
@@ -343,11 +343,11 @@ accuracy                          0.86       383
 
 ![svm_confusion](svm_confusion.png)
 
-The SVM achieves our best traditional model performance at 86% accuracy. I think SVM's are somewhat underappreciated amid all the neural network hype. They train in an amount of time that is quite zippy compared to more complex models that do not always beat them without a lot of training data and with less risk of overfitting.
+The SVM achieves our best traditional model performance at 86% accuracy. I think SVM's are somewhat underappreciated amid all the neural network hype, for reference on this see "[Do we Need Hundreds of Classifiers to Solve Real World Classification Problems?](https://dl.acm.org/doi/10.5555/2627435.2697065)"  by Fernández-Delgado et al. (2014). SVms can be trained in an amount of time that is quite zippy compared to more complex models that do not always beat them without a lot of training data and with less risk of overfitting.
 
 ## Deep Learning and Transformer Models
 
-Transformer models revolutionized NLP tasks by capturing complex contextual relationships in text. Here we use DistilBERT  (Sanh, Debut, Chaumond, & Wolf, 2019), a lightweight version of BERT (Bidirectional Encoder Representations from Transformers) (Devlin, Chang, Lee, & Toutanova, 2019). 
+Transformer models revolutionized NLP tasks by capturing complex contextual relationships in text (Wolf et al., 2020). Here we use DistilBERT  (Sanh, Debut, Chaumond, & Wolf, 2019), a lightweight version of BERT (Bidirectional Encoder Representations from Transformers) (Devlin, Chang, Lee, & Toutanova, 2019).  The [Tranformers](https://github.com/huggingface/transformers) open source library (Wolf et al., 2020) from [Hugging Face](https://huggingface.co/) has democratized access to pre-trained transformer models for the broader machine learning community.
 
 Unlike traditional methods that treat words as independent units, transformer models like BERT understand context by analyzing how words relate to all other words in a sentence simultaneously. This 'attention mechanism' allows the model to capture subtle stylistic patterns that might be missed by simpler approaches.
 
@@ -604,6 +604,29 @@ The classification results highlight the distinct writing styles of that Emerson
 21. Waskom, M.L. (2021). seaborn: statistical data visualization. *Journal of Open Source Software*, 6(60), 3021. https://doi.org/10.21105/joss.03021
 
 22. Paszke, A., Gross, S., Massa, F., Lerer, A., Bradbury, J., Chanan, G., ... & Chintala, S. (2019). PyTorch: An Imperative Style, High-Performance Deep Learning Library. *Advances in Neural Information Processing Systems*, 32, 8026-8037.
+
+### Core NLP and Text Classification
+- Fernández-Delgado, M., Cernadas, E., Barro, S., & Amorim, D. (2014). Do we need hundreds of classifiers to solve real world classification problems? Journal of Machine Learning Research, 15(1), 3133-3181.
+
+- Hochreiter, S., & Schmidhuber, J. (1997). Long short-term memory. Neural computation, 9(8), 1735-1780.
+
+- Koppel, M., Schler, J., & Argamon, S. (2009). Computational methods in authorship attribution. Journal of the American Society for Information Science and Technology, 60(1), 9-26.
+
+- LeCun, Y., Bottou, L., Bengio, Y., & Haffner, P. (1998). Gradient-based learning applied to document recognition. Proceedings of the IEEE, 86(11), 2278-2324.
+
+- Manning, C. D., & Schütze, H. (1999). Foundations of statistical natural language processing. MIT Press.
+
+- Project Gutenberg. (n.d.). Free eBooks. https://www.gutenberg.org/
+
+- Rocchio Jr, J. J. (1971). Relevance feedback in information retrieval. The SMART retrieval system: experiments in automatic document processing, 313-323.
+
+- Wolf, T., Debut, L., Sanh, V., Chaumond, J., Delangue, C., Moi, A., Cistac,  P., Rault, T., Louf, R., Funtowicz, M., Davison, J., Shleifer, S.,  Platen, P.V., Ma, C., Jernite, Y., Plu, J., Xu, C., Scao, T.L., Gugger,  S., Drame, M., Lhoest, Q., & Rush, A.M. (2020). [Transformers:  State-of-the-Art Natural Language Processing.](https://aclanthology.org/2020.emnlp-demos.6/) *Conference on Empirical Methods in Natural Language Processing*.
+
+- Salton, G., & Buckley, C. (1988). Term-weighting approaches in automatic text retrieval. Information processing & management, 24(5), 513-523.
+
+- Spärck Jones, K. (1972). A statistical interpretation of term specificity and its application in retrieval. Journal of documentation, 28(1), 11-21.
+
+
 
 ## Appendix: Project Repository
 
