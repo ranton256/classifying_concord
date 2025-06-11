@@ -516,6 +516,22 @@ Several patterns emerge in the 30 misclassified examples (out of 383):
 
 One interesting observation is that Thoreau's more practical descriptions are rarely misclassified, while his philosophical musings more frequently get attributed to Emerson. This aligns with our understanding of their writing styles—Thoreau's concrete observations of nature are distinctive, while both authors share transcendentalist philosophical language.
 
+It is also interesting to look at the length of passages versus the author prediction correctness.
+
+![density_plots](/Users/ranton/classifying_concord/density_plots.png)
+
+**Word Count (Median/Average)**
+
+| Classification | Correctly Classified | Incorrectly Classified |
+| -------------- | -------------------- | ---------------------- |
+| all            | 78.00/90.59          | 68.50/77.50            |
+| thoreau        | 100.00/111.79        | 78.50/74.38            |
+| emerson        | 62.00/71.52          | 65.50/79.06            |
+
+We can see that the median and average length correleates  significantly with correctness for passages by Thoreau but seems to have less relation for passages by Emerson.
+
+
+
 ### Model Interpretability
 
 While transformer models achieve the highest accuracy, they function as "black boxes" compared to traditional models. With logistic regression, we can examine the coefficients to identify the most influential words for classification:
