@@ -524,6 +524,18 @@ The most strongly Emerson-associated terms include abstract nouns and adjectives
 
 ## Conclusion
 
+###  Key Takeaways
+
+| 📊 **Metric**              | 📈 **Result**             | 🔍 **Key Insight**                                      |
+| ------------------------- | ------------------------ | ------------------------------------------------------ |
+| **Traditional ML**        | 83-86% accuracy          | SVM performed best among classical methods             |
+| **BERT + Classical ML**   | 89-90% accuracy          | Pre-trained features significantly improve performance |
+| **Fine-tuned DistilBERT** | 92% accuracy             | Context-aware models excel at stylistic distinction    |
+| **Most Distinctive**      | Thoreau's nature writing | Concrete observations vs. abstract philosophy          |
+| **Most Challenging**      | Philosophical passages   | Both authors share transcendentalist vocabulary        |
+
+The article demonstrates solid technical work and clear passion for both literature and machine learning. These improvements would make it more accessible to a broader audience while maintaining its technical depth.
+
 Predicting the author of Emerson and Thoreau's writing demonstrates the application of machine learning to literary style classification. The results show how well even simpler ML models can distinguish between these authors. The fine-tuned DistilBERT model achieved 92% accuracy on the test set, while traditional machine learning approaches reached 83-86% accuracy.
 
 The performance progression from traditional to transformer-based models reflects broader developments in natural language processing. TF-IDF vectorization with classic algorithms provided a functional baseline (83-86% accuracy), while transformer models improved on these results (92% accuracy) by capturing contextual relationships between words.
