@@ -483,6 +483,18 @@ This progression demonstrates the advantages of modern transformer models, which
 
 The 6-9% accuracy improvement from traditional ML to transformers suggests that author style involves subtle contextual patterns beyond simple word frequency that require more sophisticated language understanding to detect.
 
+
+
+```mermaid
+xychart-beta
+    title "ML Approach Performance"
+    x-axis ["Log. Reg.", "Rand. Forest", "SVM", "Ft. Ex. dBERT+SVM", "F.Tuned dBERT"]
+    y-axis "Accuracy (%)" 80 --> 95
+    bar [85, 83, 86, 90, 92]
+```
+
+
+
 ### Misclassification Analysis
 
 Examining misclassified examples provides linguistic insights:
