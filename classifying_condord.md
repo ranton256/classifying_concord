@@ -168,6 +168,59 @@ combined_df = shuffle(combined_df, random_state=7919)
 
 The result is a dataset of 1,911 text segments (1,064 from Emerson and 847 from Thoreau), each labeled with its author. This balance helps prevent biases in our models.
 
+
+
+## Overview of Methods
+
+At a high level there are two versions of the ML pipeline whether we are using a deep learning/transformers based approach or using a more traditional path.
+
+
+
+**Traditional path** (blue): Raw Text → Preprocessing → TF-IDF → Classical ML models → Classification (83-86% accuracy)
+
+**Transformer path** (green): Raw Text → Preprocessing → BERT embeddings → Fine-tuned model → Classification (92% accuracy)
+
+```mermaid
+flowchart TD
+    A["📝 Raw Text<br/>Emerson: 'Essays: First Series'<br/>Thoreau: 'Walden & Civil Disobedience'<br/>1,911 text segments"] --> B["🔧 Preprocessing<br/>• Remove Project Gutenberg boilerplate<br/>• Segment into 3-5 sentences<br/>• Remove stopwords & punctuation<br/>• Lemmatization with spaCy"]
+    
+    B --> C["🔀 Feature Extraction Split"]
+    
+    C --> D["📊 Traditional Path:<br/>TF-IDF Vectorization"]
+    C --> E["🧠 Transformer Path:<br/>DistilBERT Embeddings"]
+    
+    D --> F["🎯 Classical ML Models<br/>• Logistic Regression<br/>• Random Forest<br/>• Support Vector Machine"]
+    
+    E --> G["🔧 DistilBERT Feature Extraction"]
+    E --> H["🎯 Fine-tuned DistilBERT"]
+    
+    G --> I["🎯 Classical ML + BERT Features<br/>• Logistic Regression<br/>• SVM"]
+    
+    F --> J["📈 Results: 83-86% Accuracy<br/>🏆 Best: SVM (86%)"]
+    I --> K["📈 Results: 89-90% Accuracy<br/>🏆 Best: Logistic Regression (90%)"]
+    H --> L["📈 Results: 92% Accuracy<br/>🏆 Best Overall Performance"]
+    
+    J --> M["🎯 Final Classification<br/>Emerson vs Thoreau"]
+    K --> M
+    L --> M
+    
+    style A fill:#0d47a1,color:#ffffff
+    style B fill:#4a148c,color:#ffffff
+    style C fill:#e65100,color:#ffffff
+    style D fill:#c62828,color:#ffffff
+    style E fill:#2e7d32,color:#ffffff
+    style F fill:#d32f2f,color:#ffffff
+    style G fill:#388e3c,color:#ffffff
+    style H fill:#1976d2,color:#ffffff
+    style I fill:#558b2f,color:#ffffff
+    style J fill:#b71c1c,color:#ffffff
+    style K fill:#33691e,color:#ffffff
+    style L fill:#1565c0,color:#ffffff
+    style M fill:#37474f,color:#ffffff
+```
+
+
+
 ## Text Representation Techniques
 
 ### Visualization with Word Clouds
@@ -207,7 +260,7 @@ X = vectorizer.fit_transform(combined_df["final_text"])
 y = combined_df["label"]
 ```
 
-TF-IDF represents each text segment as a vector, where each dimension corresponds to a term in the vocabulary. The value combines how frequently the term appears in the document (TF) and how unique it is across all documents (IDF). This balances common words against distinctive ones that might better differentiate the authors.
+TF-IDF converts text into numerical vectors by calculating two components for each word: how frequently it appears in a specific document (Term Frequency), and how unique it is across all documents (Inverse Document Frequency). The value combines how frequently the term appears in the document (TF) and how unique it is across all documents (IDF). This balances common words against distinctive ones that might better differentiate the authors.
 
 ## Traditional ML Classification Models
 
@@ -296,7 +349,14 @@ The SVM achieves our best traditional model performance at 86% accuracy. I think
 
 Transformer models revolutionized NLP tasks by capturing complex contextual relationships in text. Here we use DistilBERT  (Sanh, Debut, Chaumond, & Wolf, 2019), a lightweight version of BERT (Bidirectional Encoder Representations from Transformers) (Devlin, Chang, Lee, & Toutanova, 2019). 
 
-In 2025, this is not exactly state of the art, however you can train or fine-tune it easily with modest resources. I did this entire project on Google Colab for free.
+Unlike traditional methods that treat words as independent units, transformer models like BERT understand context by analyzing how words relate to all other words in a sentence simultaneously. This 'attention mechanism' allows the model to capture subtle stylistic patterns that might be missed by simpler approaches.
+
+In 2025, DistilBERT is not exactly state of the art, however you can train or fine-tune it easily with modest resources. I did this entire project on Google Colab for free.
+
+We employ two different strategies using DistilBERT:
+
+1. **Feature Extraction**: We freeze DistilBERT's pre-trained weights and use its internal representations as sophisticated features for a traditional classifiers, in our case an SVM model.
+2. **Fine-tuning**: We allow DistilBERT's weights to update during training on our dataset, adapting the entire model specifically for our Emerson vs. Thoreau classification task.
 
 ### Feature Extraction Approach
 
@@ -421,6 +481,8 @@ Looking at our results across models:
 
 This progression demonstrates the advantages of modern transformer models, which capture contextual information and semantic relationships beyond what bag-of-words approaches can represent.
 
+The 6-9% accuracy improvement from traditional ML to transformers suggests that author style involves subtle contextual patterns beyond simple word frequency that require more sophisticated language understanding to detect.
+
 ### Misclassification Analysis
 
 Examining misclassified examples provides linguistic insights:
@@ -450,7 +512,7 @@ The most strongly Emerson-associated terms include abstract nouns and adjectives
 
 ## Conclusion
 
-This analysis of Emerson and Thoreau's writing demonstrates the application of machine learning to literary style classification. The results show how well even simpler ML models can distinguish between these authors with reasonable accuracy. The fine-tuned DistilBERT model achieved 92% accuracy on the test set, while traditional machine learning approaches reached 83-86% accuracy.
+Predicting the author of Emerson and Thoreau's writing demonstrates the application of machine learning to literary style classification. The results show how well even simpler ML models can distinguish between these authors. The fine-tuned DistilBERT model achieved 92% accuracy on the test set, while traditional machine learning approaches reached 83-86% accuracy.
 
 The performance progression from traditional to transformer-based models reflects broader developments in natural language processing. TF-IDF vectorization with classic algorithms provided a functional baseline (83-86% accuracy), while transformer models improved on these results (92% accuracy) by capturing contextual relationships between words.
 
