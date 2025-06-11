@@ -343,7 +343,7 @@ accuracy                          0.86       383
 
 ![svm_confusion](svm_confusion.png)
 
-The SVM achieves our best traditional model performance at 86% accuracy. I think SVM's are somewhat underappreciated amid all the neural network hype, for reference on this see "[Do we Need Hundreds of Classifiers to Solve Real World Classification Problems?](https://dl.acm.org/doi/10.5555/2627435.2697065)"  by Fernández-Delgado et al. (2014). SVms can be trained in an amount of time that is quite zippy compared to more complex models that do not always beat them without a lot of training data and with less risk of overfitting.
+The SVM achieves our best traditional model performance at 86% accuracy. I think SVM's are somewhat underappreciated amid all the neural network hype, for reference on this see "[Do we Need Hundreds of Classifiers to Solve Real World Classification Problems?](https://dl.acm.org/doi/10.5555/2627435.2697065)"  by Fernández-Delgado et al. (2014). SVMs can be trained in an amount of time that is quite zippy compared to more complex models that do not always beat them without a lot of training data and with less risk of overfitting.
 
 ## Deep Learning and Transformer Models
 
@@ -484,13 +484,13 @@ This progression demonstrates the advantages of modern transformer models, which
 The 6-9% accuracy improvement from traditional ML to transformers suggests that author style involves subtle contextual patterns beyond simple word frequency that require more sophisticated language understanding to detect.
 
 
-
+92
 ```mermaid
 xychart-beta
     title "ML Approach Performance"
-    x-axis ["Log. Reg.", "Rand. Forest", "SVM", "Ft. Ex. dBERT+SVM", "F.Tuned dBERT"]
+    x-axis ["Rand. Forest", "Log. Reg.", "SVM", "dBERT+RF", "dBERT+SVM", "dBERT+LR", "F.Tuned dBERT"]
     y-axis "Accuracy (%)" 80 --> 95
-    bar [85, 83, 86, 90, 92]
+    bar [83, 85, 86, 89, 90, 92, 93]
 ```
 
 
