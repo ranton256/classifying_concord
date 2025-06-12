@@ -480,7 +480,7 @@ One interesting observation is that Thoreau's more practical descriptions are ra
 
 It is also interesting to look at the length of passages versus the author prediction correctness.
 
-![density_plots](/Users/ranton/classifying_concord/density_plots.png)
+![density_plots](density_plots.png)
 
 **Word Count (Median/Average)**
 
