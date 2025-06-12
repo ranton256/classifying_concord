@@ -59,4 +59,4 @@ This project bridges machine learning and literary analysis, providing a reprodu
    jupyter notebook supervised_ML_identify_author.ipynb
    ```
 
-For more details, see the full article in `classifying_condord.md` and the code in this repository.
+For more details, see the full article in `classifying_concord.md` and the code in this repository.
