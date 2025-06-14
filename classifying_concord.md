@@ -1,10 +1,6 @@
-# Classifying Concord: Machine Learning Meets Transcendentalism
+# Classifying Concord
 
 © 2025 Richard Anton. All rights reserved.
-
-The accompanying code, but not this article itself, is licensed under the MIT License. See the LICENSE file for details.
-
-The literary works referenced in this article are in the public domain.
 
 ## Introduction
 
@@ -12,24 +8,15 @@ This article is a walkthrough of using machine learning classification technique
 
 I wanted to show methods for classifying text using a novel dataset rather than one of the toy ones so often used for tutorials. Eventually I settled on classifying text to predict the original author.  Since I wanted this to be primarily about actual writing style rather than the changes to language between regions or over time I chose two authors from the same era and location, Emerson and Thoreau. For background on computational authorship attribution see Koppel et al. (2009) .
 
-Ralph Waldo Emerson and Henry David Thoreau both resided in mid-19th-century Concord, Massachusetts. Their writings and philosophical exchanges contributed to [American Transcendentalism](https://plato.stanford.edu/entries/transcendentalism/), and both produced literary works that remain influential. Despite their shared location and intellectual community, their writing styles differ in identifiable ways.
-
 *Walden* has always been one of my favorite books and had a big influence on me when I first read it in high school, but Emerson was a different story. I found his writing style wordy and frustrating. Recently I revisited the context of these works when I read *[The Transcendentalists and Their World](https://us.macmillan.com/books/9780374279325/thetranscendentalistsandtheirworld/)* (Gross, 2021) which gave me the idea to use their writings as the basis for this project.
-
-All the code and data used in this study can be accessed via the GitHub repo [http://github.com/ranton256/classifying_concord](github.com/ranton256/classifying_concord).
 
 The dataset was created from two public domain works, one by each author. For Emerson, I used *Essays: First Series* (1841), and for Thoreau, there was really no choice but *Walden, and On The Duty Of Civil Disobedience* (1854). 
 
-This dataset offers several practical advantages for educational purposes:
-
-1. **Historical context**: The texts come from the same historical period and location.
-2. **Controlled variables**: Both authors wrote philosophical prose on related themes.
-3. **Clear differences**: Despite similarities in topic, the authors maintain distinct writing styles.
-4. **Accessibility**: The works are in the public domain and widely available.
-
 The texts were segmented into passages of 3-5 sentences each, creating a collection of labeled examples for training and testing classification models.
 
-To explore how different machine learning approaches perform on this task I compared multiple methods.  These included traditional methods, including logistic regression, random forests, and support vector machines, along with newer transformer-based models.
+To explore how different machine learning approaches perform on this task I compared multiple methods including classical models like logistic regression, random forests, and support vector machines, along with newer transformer-based models.
+
+The accompanying code, but not this article itself, is licensed under the MIT License. See the LICENSE file for details.
 
 ## The Evolution of Machine Learning Classification
 
@@ -42,7 +29,7 @@ Text classification has developed substantially over the years. Early methods in
 
 Each era brought improvements to accuracy and capability. The field also expanded from simple categorization to include other use cases like sentiment analysis, authorship attribution (Stamatatos, 2009), and stylometry—the quantitative study of writing style (Burrows, 2002).
 
-In our Concord project, we compare methods across this range, from traditional TF-IDF based classification to transformer-based models.
+We compare methods across this range, first with TF-IDF representation with various classifiers then using a pretrained transformer DistilBERT model first as a feature extractor, then directly as a classifier with fine-tuning.
 
 ## Creating a Unique Literary Dataset
 
@@ -66,7 +53,7 @@ emerson_file = download_file(emerson_txt_url)
 thoreau_file = download_file(thoreau_txt_url)
 ```
 
-This programmatic approach ensures reproducibility and automation, eliminating the need for manual file handling.
+This programmatic approach ensures reproducibility and automation eliminating the need for manual file handling.
 
 ### Text Preprocessing
 
@@ -91,7 +78,7 @@ def trim_frontmatter(filename):
 
 ### Text Segmentation
 
-We segment the texts into manageable chunks of 3-5 sentences each. This creates a dataset with many examples for training and testing while preserving enough context to capture authorial style. We use [spaCy](https://spacy.io/), a powerful and popular natural language processing library, to perform the segmentation (Honnibal & Montani, 2017). 
+We segment the texts into manageable chunks of 3-5 sentences each. This creates a dataset with many examples for training and testing while preserving enough context to capture authorial style. We did not directly experiment with different sample lengths, but having the variability allows us to still do some comparison on how the length affects model performance.
 
 This function creates randomly-sized windows of 3-5 sentences, providing natural text chunks while introducing variation in the dataset.
 
@@ -130,7 +117,7 @@ combined_df = pd.concat([emerson_df, thoreau_df])
 combined_df = shuffle(combined_df, random_state=7919)
 ```
 
-The result is a dataset of 1,911 text segments (1,064 from Emerson and 847 from Thoreau), each labeled with its author. This balance helps prevent biases in our models.
+The result is a dataset of 1,911 text segments (1,064 from Emerson and 847 from Thoreau), each labeled with its author. This is relatively balancd which helps prevent bias in the models.
 
 
 
@@ -140,9 +127,9 @@ At a high level there are two versions of the ML pipeline whether we are using a
 
 
 
-**Traditional path** (blue): Raw Text → Preprocessing → TF-IDF → Classical ML models → Classification (83-86% accuracy)
+**Traditional path** (blue): Raw Text → Preprocessing → TF-IDF → Classical ML models → Classification
 
-**Transformer path** (green): Raw Text → Preprocessing → BERT embeddings → Fine-tuned model → Classification (92% accuracy)
+**Transformer path** (green): Raw Text → Preprocessing → BERT embeddings → Fine-tuned model → Classification
 
 ```mermaid
 flowchart TD
@@ -199,7 +186,7 @@ These visualizations already reveal interesting differences in vocabulary. Emers
 
 ### Text Preprocessing for ML
 
-For machine learning, we preprocess the text using spaCy to remove stopwords and perform lemmatization, which reduces words to their base forms:
+We preprocess the text using [spaCy](https://spacy.io/) (Honnibal & Montani, 2017) to remove stopwords and perform lemmatization, which reduces words to their base forms:
 
 ```python
 final_text = []
@@ -228,7 +215,7 @@ TF-IDF converts text into numerical vectors by calculating two components for ea
 
 ## Traditional ML Classification Models
 
-We split our dataset into training (80%) and test (20%) sets to evaluate model performance:
+We split our dataset into training (80%) and test (20%) sets to evaluate model performance, as typically needed for a supervised ML workflow:
 
 ```python
 x_train, x_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=4909)
@@ -261,7 +248,7 @@ accuracy                          0.85       383
 
 Logistic regression achieves an impressive 85% accuracy, correctly identifying the author in most cases. 
 
-Here we have included confusion matrix. For space we will omit this for most of the models, but they are available in the [GitHub repo](https://github.com/ranton256/classifying_concord/tree/main).
+Here we have included the confusion matrix. For space we will omit this for most of the models, but they are available in the [GitHub repo](https://github.com/ranton256/classifying_concord/tree/main) in the original notebook.
 
 ### Random Forest
 
@@ -311,15 +298,15 @@ The SVM achieves our best traditional model performance at 86% accuracy. I think
 
 ## Deep Learning and Transformer Models
 
-Transformer models revolutionized NLP tasks by capturing complex contextual relationships in text (Wolf et al., 2020). Here we use DistilBERT  (Sanh, Debut, Chaumond, & Wolf, 2019), a lightweight version of BERT (Bidirectional Encoder Representations from Transformers) (Devlin, Chang, Lee, & Toutanova, 2019).  The [Tranformers](https://github.com/huggingface/transformers) open source library (Wolf et al., 2020) from [Hugging Face](https://huggingface.co/) has democratized access to pre-trained transformer models for the broader machine learning community.
+Transformer models revolutionized NLP tasks by capturing complex contextual relationships in text (Wolf et al., 2020). Here we use DistilBERT (Sanh, Debut, Chaumond, & Wolf, 2019), a lightweight version of BERT (Bidirectional Encoder Representations from Transformers) (Devlin, Chang, Lee, & Toutanova, 2019). We use the popular [Tranformers](https://github.com/huggingface/transformers) open source library (Wolf et al., 2020) from [Hugging Face](https://huggingface.co/) for loading, training, and running the model.
 
 Unlike traditional methods that treat words as independent units, transformer models like BERT understand context by analyzing how words relate to all other words in a sentence simultaneously. This 'attention mechanism' allows the model to capture subtle stylistic patterns that might be missed by simpler approaches.
 
-In 2025, DistilBERT is not exactly state of the art, however you can train or fine-tune it easily with modest resources. I did this entire project on Google Colab for free.
+In 2025, DistilBERT is not exactly state of the art, however you can train or fine-tune it easily with very modest resources. You can replicate this entire project in Google Colab for free.
 
 We employ two different strategies using DistilBERT:
 
-1. **Feature Extraction**: We freeze DistilBERT's pre-trained weights and use its internal representations as sophisticated features for a traditional classifiers, in our case an SVM model.
+1. **Feature Extraction**: We freeze DistilBERT's pre-trained weights and use its internal representations as sophisticated features for a traditional classifier.
 2. **Fine-tuning**: We allow DistilBERT's weights to update during training on our dataset, adapting the entire model specifically for our Emerson vs. Thoreau classification task.
 
 ### Feature Extraction Approach
@@ -371,7 +358,7 @@ This hybrid approach shows a significant improvement, with accuracy increasing t
 
 ### Fine-tuning DistilBERT
 
-And finally, we [fine-tune](https://huggingface.co/docs/transformers/en/training) DistilBERT specifically for our classification task 
+And finally, we [fine-tune](https://huggingface.co/docs/transformers/en/training) DistilBERT specifically for our classification task using the training split of our dataset.
 
 ```python
 from transformers import DistilBertForSequenceClassification
@@ -459,7 +446,7 @@ xychart-beta
 
 ### Misclassification Analysis
 
-Examining misclassified examples provides linguistic insights:
+Examining misclassified examples provides some insights on model performance relative to different aspects of input samples:
 
 ```python
 for i, (txt, lbl, pred) in enumerate(zip(x_test_trans, y_test_trans, y_pred_trans)):
@@ -474,9 +461,9 @@ Several patterns emerge in the 30 misclassified examples (out of 383):
 1. **Project Gutenberg boilerplate**: Many misclassifications involve similar license text that appears in both works
 2. **Short segments**: Brief text snippets provide insufficient stylistic markers
 3. **Universal themes**: When both authors discuss similar philosophical concepts, the distinction blurs
-4. **Quotations**: When either author quotes someone else, their personal style is diminished
+4. **Quotations**: When either author quotes someone else, their personal style is diminished.
 
-One interesting observation is that Thoreau's more practical descriptions are rarely misclassified, while his philosophical musings more frequently get attributed to Emerson. This aligns with our understanding of their writing styles—Thoreau's concrete observations of nature are distinctive, while both authors share transcendentalist philosophical language.
+One interesting observation is that Thoreau's more practical descriptions seem to rarely be misclassified, while his philosophical musings more frequently get attributed to Emerson. This aligns with our understanding of their writing styles-Thoreau's concrete observations of nature are distinctive, while both authors share transcendentalist philosophical language.
 
 It is also interesting to look at the length of passages versus the author prediction correctness.
 
@@ -502,32 +489,19 @@ The most strongly Emerson-associated terms include abstract nouns and adjectives
 
 ## Conclusion
 
-###  Key Takeaways
+The results show how well even simpler ML models can distinguish between the literary style of these two authors. The fine-tuned DistilBERT model achieved 92% accuracy on the test set, while traditional machine learning approaches reached 83–86% accuracy.
 
-| 📊 **Metric**              | 📈 **Result**             | 🔍 **Key Insight**                                      |
-| ------------------------- | ------------------------ | ------------------------------------------------------ |
-| **Traditional ML**        | 83-86% accuracy          | SVM performed best among classical methods             |
-| **BERT + Classical ML**   | 89-90% accuracy          | Pre-trained features significantly improve performance |
-| **Fine-tuned DistilBERT** | 92% accuracy             | Context-aware models excel at stylistic distinction    |
-| **Most Distinctive**      | Thoreau's nature writing | Concrete observations vs. abstract philosophy          |
-| **Most Challenging**      | Philosophical passages   | Both authors share transcendentalist vocabulary        |
+The performance progression from traditional to transformer-based models reflects broader developments in natural language processing. TF-IDF vectorization with classic algorithms provided a functional baseline (83–86% accuracy), while transformer models improved on these results (92% accuracy) by capturing contextual relationships between words.
 
-The article demonstrates solid technical work and clear passion for both literature and machine learning. These improvements would make it more accessible to a broader audience while maintaining its technical depth.
-
-Predicting the author of Emerson and Thoreau's writing demonstrates the application of machine learning to literary style classification. The results show how well even simpler ML models can distinguish between these authors. The fine-tuned DistilBERT model achieved 92% accuracy on the test set, while traditional machine learning approaches reached 83-86% accuracy.
-
-The performance progression from traditional to transformer-based models reflects broader developments in natural language processing. TF-IDF vectorization with classic algorithms provided a functional baseline (83-86% accuracy), while transformer models improved on these results (92% accuracy) by capturing contextual relationships between words.
-
-The misclassification analysis revealed specific patterns in the 30 misclassified examples (from 383 total test examples):
-
-1. Project Gutenberg boilerplate text caused confusion for all models
-2. Short text segments provided insufficient data for accurate classification
-3. Philosophical passages where both authors addressed similar concepts were harder to distinguish
-4. Quoted material from other sources disrupted the authors' characteristic styles
-
-Thoreau's nature descriptions and practical observations were rarely misclassified, while his philosophical reflections were sometimes attributed to Emerson. This aligns with the known characteristics of their writing—Thoreau's concrete observations stand distinct from Emerson's typically abstract style.
+The misclassification analysis revealed some specific patterns in the 30 misclassified examples (from 383 total test examples). These conclusions are qualitative and somewhat subjective, but indicate a tendency for quotations, shorter samples, and topic to affect the accuracy of the model on particular samples.
 
 The classification results highlight the distinct writing styles of that Emerson and Thoreau despite their shared historical context, philosophy, interests, and proximity.
+
+If you made it here thanks for reading, and I hope you found this helpful and interesting.
+
+## Project Repository
+
+All code is available at https://github.com/ranton256/classifying_concord
 
 ## References
 
@@ -603,33 +577,3 @@ The classification results highlight the distinct writing styles of that Emerson
 - Salton, G., & Buckley, C. (1988). Term-weighting approaches in automatic text retrieval. Information processing & management, 24(5), 513-523.
 
 - Spärck Jones, K. (1972). A statistical interpretation of term specificity and its application in retrieval. Journal of documentation, 28(1), 11-21.
-
-
-
-## Appendix: Project Repository
-
-
-### Installation and Usage
-
-An alternative to these steps is to use Google Colab to import the notebook directly from GitHub.
-
-1. Clone the repository:
-   ```
-   git clone https://github.com/yourusername/classifying_concord.git
-   cd classifying_concord
-   ```
-
-2. Install required packages:
-   ```
-   pip install -r requirements.txt
-   ```
-
-3. Download the spaCy English model:
-   ```
-   python -m spacy download en_core_web_sm
-   ```
-
-4. Run the Jupyter notebook:
-   ```
-   jupyter notebook supervised_ML_identify_author.ipynb
-   ```
